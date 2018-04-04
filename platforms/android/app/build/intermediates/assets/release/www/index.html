@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2012-2016 Adobe Systems Incorporated. All rights reserved.
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#2196f3">
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+
+    <link rel="stylesheet" type="text/css" href="css/framework7.min.css" />
+    <title>IVolunteer</title>
+</head>
+
+<body>
+  <div id="app">
+    <div class="panel panel-right panel-cover">
+      <div class="list">
+        <ul id="show_activity">
+
+        </ul>
+        <div class="block block-strong row">
+          <textarea placeholder="Enter event description..." id="event_desc"  class="resizable"></textarea>
+        </div>
+        <div class="block block-strong row">
+          <div class="col"><a class="button panel-close" href="#">Close</a></div>
+          <div class="col"><a class="button fill-form-from-data" id="saveDesc" href="#">Save</a></div>
+        </div>
+      </div>
+    </div>
+      <!-- Statusbar overlay -->
+      <div class="statusbar"></div>
+
+      <!-- Your main view, should have "view-main" class -->
+      <div class="view view-main">
+        <!-- Initial Page, "data-name" contains page name -->
+        <div data-name="home" class="page">
+
+          <!-- Top Navbar -->
+          <div class="navbar">
+            <div class="navbar-inner">
+              <div class="title">IVolunteer</div>
+            </div>
+          </div>
+
+          <!-- Toolbar -->
+          <div class="toolbar">
+            <div class="toolbar-inner">
+              <!-- Toolbar links -->
+              <a href="/" class="link">Add activity</a>
+              <a href="/listActivity/" class="link">List activities</a>
+            </div>
+          </div>
+
+          <!-- Scrollable page content -->
+          <div class="page-content">
+            <div id="step1">
+              <form class="list" id="activityForm">
+                <ul>
+                  <li  id="errorMessage" style="display:none">
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div id="errorMessageContainer" class="item-title item-label" style="color:red;"></div>
+                      </div>
+                    </div>
+
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Volunteering activity name(*)</div>
+                        <div class="item-input-wrap">
+                          <input type="text" required name="activity_name" id="activity_name" placeholder="Volunteering activity name">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Location</div>
+                        <div class="item-input-wrap">
+                          <input type="text" name="activity_location" id="activity_location" placeholder="Location">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Date(*)</div>
+                        <div class="item-input-wrap">
+                          <input type="date" name="activity_date" id="activity_date" required placeholder="Date">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Time of the activity</div>
+                        <div class="item-input-wrap">
+                          <input type="text" id="activity_time" name="activity_time"  placeholder="Time of the activity">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Name of the volunteer(*)</div>
+                        <div class="item-input-wrap">
+                          <input type="text" name="volunteer_name" id="volunteer_name" required placeholder="Name of the volunteer">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </form>
+              <div class="block block-strong row">
+                <div id="imgDisplay" class="col"></div>
+              </div>
+              <div class="block block-strong row">
+                <div class="col"><a class="button convert-form-to-data" id="takePictureBtn" href="#">Take picture</a></div>
+              </div>
+              <div class="block block-strong row">
+                <div class="col"><a class="button convert-form-to-data" id="clearBtn" href="#">Clear</a></div>
+                <div class="col"><a class="button fill-form-from-data" id="saveBtn" href="#">Save</a></div>
+              </div>
+            </div>
+            <div id="step2" style="display:none">
+              <div class="list">
+                <ul id="ulConformation">
+
+                </ul>
+                <div class="block block-strong row">
+                  <div class="col"><a class="button convert-form-to-data" id="backBtn" href="#">Back</a></div>
+                  <div class="col"><a class="button fill-form-from-data" id="confirmBtn" href="#">Confirm</a></div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/framework7.min.js"></script>
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+
+    </script>
+</body>
+
+</html>
